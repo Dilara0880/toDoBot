@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}
+Task List
+{% endblock %}
+
+    <style>
+        #completed-button {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        #not-completed-button {
+            background-color: white;
+            color: black;
+            border: none;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+
+{% block content %}
+   <h2>Task List</h2>
+    {% if tasks %}
+        <ul>
+        {% for task in tasks %}
+            <li>
+                <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
+
+                <form method="POST" action="{% url 'task_toggle' task.id %}">
+                    {% csrf_token %}
+                    {% if task.completed %}
+                        <input id="completed-button" type="submit" value="Completed">
+                    {% else %}
+                        <input id="not-completed-button" type="submit" value="Uncompleted">
+                    {% endif %}
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No tasks to display</p>
+    {% endif %}
+{% endblock %}
